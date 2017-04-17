@@ -1,0 +1,15 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+service: bulldozer
+
+handlers:
+- url: .*
+  script: bulldozer.app
+  
+automatic_scaling:
+  min_idle_instances: 0
+  max_idle_instances: 1
+  min_pending_latency: 50ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 80

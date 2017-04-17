@@ -1,0 +1,6 @@
+lib
+static
+!src/static
+.sass-cache
+*.css.map
+*.css
