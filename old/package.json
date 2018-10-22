@@ -1,10 +1,9 @@
 {
   "name": "bulldozer",
-  "version": "2.0.0",
-  "description": "A remake of the classic Bulldozer game from Windows 95",
-  "main": "dist/dozer.js",
+  "version": "1.0.0",
+  "description": "Remake of the classic, Windows 95 game Bulldozer",
+  "main": ".",
   "scripts": {
-    "start": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,7 +11,9 @@
     "url": "git+https://github.com/wyattis/bulldozer.git"
   },
   "keywords": [
-    "bulldozer"
+    "bulldozer",
+    "classic",
+    "html5"
   ],
   "author": "Wyatt Israel",
   "license": "ISC",
@@ -21,7 +22,9 @@
   },
   "homepage": "https://github.com/wyattis/bulldozer#readme",
   "devDependencies": {
-    "typescript": "^3.1.3",
-    "webpack": "^4.22.0"
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^3.1.0",
+    "webpack-stream": "^3.2.0"
   }
 }
