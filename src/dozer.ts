@@ -1,13 +1,13 @@
-import Engine from './engine'
+import Engine from './engine/engine'
 
-const dozer = new Engine()
+const dozer = new Engine('.container')
 
-dozer.update(function () {
-
+dozer.update(function (_, delta: number) {
+  // console.log('update', delta)
 })
 
-dozer.render(function () {
-
+dozer.render(function (ctx: CanvasRenderingContext2D) {
+  ctx.fillRect(0, 0, 100, 100)
 })
 
 dozer.start()
