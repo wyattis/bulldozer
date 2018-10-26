@@ -1,6 +1,8 @@
 import Scene from "./scene";
 import Engine from "./engine";
 
+
+
 export default class SceneManager {
   private currentScene?: Scene
   private scenes: Map<string, Scene> = new Map()
@@ -12,7 +14,7 @@ export default class SceneManager {
   }
 
   async start (name: string) {
-    if (this.currentScene) {
+    if (this.currentScene && this.currentScene.destroy) {
       await this.currentScene.destroy()
     }
     this.engine.reset()
@@ -20,11 +22,21 @@ export default class SceneManager {
     const nextScene = this.scenes.get(name)
     if (nextScene) {
       this.currentScene = nextScene
-      this.currentScene.load()
+      if (this.currentScene.load) {
+        this.currentScene.load()
+      }
       await this.engine.start()
-      await this.currentScene.init()
-      this.engine.update(this.currentScene.update.bind(this.currentScene))
-      this.engine.render(this.currentScene.render.bind(this.currentScene))
+      if (this.currentScene.init) {
+        await this.currentScene.init()
+      }
+      if (this.currentScene.update) {
+        this.engine.update(this.currentScene.update.bind(this.currentScene))
+      }
+      if (this.currentScene.render) {
+        this.engine.render(this.currentScene.render.bind(this.currentScene))
+      }
+    } else {
+      console.error(`No scene with that name defined`)
     }
   }
 }

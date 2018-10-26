@@ -134,14 +134,17 @@ export default class Engine {
   }
 
   private _update (timestamp: number, delta: number): void {
-    for (let cb of this.updateCbs) {
-      cb(timestamp, delta)
+    let i = this.updateCbs.length
+    while (i--) {
+      this.updateCbs[i](timestamp, delta)
     }
   }
 
   private _render (): void {
-    for (let cb of this.renderCbs) {
-      cb(this.ctx)
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+    let i = this.renderCbs.length
+    while (i--) {
+      this.renderCbs[i](this.ctx)
     }
   }
 
