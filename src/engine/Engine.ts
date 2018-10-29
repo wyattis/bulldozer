@@ -1,4 +1,5 @@
 import Cache, {CacheType} from './Cache'
+import Point from "./Point";
 
 export interface UpdateFunction {
   (timestamp: number, delta: number): void
@@ -16,6 +17,10 @@ export interface LoadFunction {
   (key: string, url: string, type: CacheType): any
 }
 
+export interface ResizeFunction {
+  (size: Point): any
+}
+
 interface QueueObj {
   url: string
   type: CacheType
@@ -27,6 +32,7 @@ export default class Engine {
   public cache: Cache = new Cache()
   readonly ctx: CanvasRenderingContext2D
 
+  public size: Point
   private isRunning: boolean = false
   private animationFrameId: number|null = null
   private loadQueue: QueueObj[] = []
@@ -34,8 +40,10 @@ export default class Engine {
   private updateCbs: UpdateFunction[] = []
   private renderCbs: RenderFunction[] = []
 
-  constructor (parent?: string|HTMLElement) {
+  constructor (parent?: string|HTMLElement, size?: Point) {
     this.ctx = this.mount(parent || document.body)
+    this.size = size || new Point(this.ctx.canvas.width, this.ctx.canvas.height)
+    this.resize(this.size)
     this.loop = this.loop.bind(this)
   }
 
@@ -51,6 +59,13 @@ export default class Engine {
     } else {
       throw Error('no 2d ctx')
     }
+  }
+
+  public resize (size: Point) {
+    this.ctx.canvas.width = size.x
+    this.ctx.canvas.height = size.y
+    this.size.x = size.x
+    this.size.y = size.y
   }
 
   public load (key: string, url: string, type: CacheType = CacheType.IMAGE): void {

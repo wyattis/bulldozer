@@ -1,10 +1,11 @@
 import Sprite from "./Sprite";
 import Point from "../engine/Point";
+import Cache from '../engine/Cache'
 
 export enum Orientation {UP, DOWN, RIGHT, LEFT}
 
 export default class Dozer extends Sprite {
-  constructor (cache: Cache, pos: Point, key: string, private orientation: number) {
+  constructor (cache: Cache, pos: Point, key: string, public orientation: number) {
     super(cache, pos, key)
   }
 

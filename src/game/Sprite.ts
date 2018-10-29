@@ -1,4 +1,5 @@
 import Point from "../engine/Point";
+import Cache from '../engine/Cache'
 
 export default class Sprite {
   constructor (
@@ -21,5 +22,9 @@ export default class Sprite {
 
   right (step: number) {
     this.pos.x += step
+  }
+
+  render (ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.cache.get(this.cacheKey), this.pos.x * 32, this.pos.y * 32)
   }
 }

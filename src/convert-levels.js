@@ -36,7 +36,10 @@ function processLevel (data) {
        Math.floor(x / tileSize),
        Math.floor(data[3][i] / tileSize)
      ]),
-     dozer: [data[0], data[1]],
+     dozer: [
+       Math.floor(data[0] / tileSize),
+       Math.floor(data[1] / tileSize)
+     ],
      targets: data[6].map(p => [
        Math.floor(p[0] / tileSize),
        Math.floor(p[1] / tileSize)

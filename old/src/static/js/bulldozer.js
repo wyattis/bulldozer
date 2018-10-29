@@ -196,9 +196,9 @@ var Game = {
 
           Map.background.src = "static/images/Sprites/Background.png";
           Map.bricks.src = "static/images/Sprites/Bricks.png";
-          Map.block.src = "static/images/Sprites/Block.png";
-          Map.target.src = "static/images/Sprites/2Target.png";
-          Map.boulder.src = "static/images/Sprites/Boulder.png";
+          Map.block.src = "static/images/Sprites/block.png";
+          Map.target.src = "static/images/Sprites/target.png";
+          Map.boulder.src = "static/images/Sprites/boulder.png";
           Map.cdiamond.src = "static/images/Sprites/CDiamond.png";
           Map.odiamond.src = "static/images/Sprites/ODiamond.png";
           Map.circle.src = "static/images/Sprites/Circle.png";

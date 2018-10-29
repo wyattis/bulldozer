@@ -19,9 +19,9 @@ var Map = {
 
         Map.background.src = "images/Sprites/Background.png";
         Map.bricks.src = "images/Sprites/Bricks.png";
-        Map.block.src = "images/Sprites/Block.png";
-        Map.target.src = "images/Sprites/2Target.png";
-        Map.boulder.src = "images/Sprites/Boulder.png";
+        Map.block.src = "images/Sprites/block.png";
+        Map.target.src = "images/Sprites/target.png";
+        Map.boulder.src = "images/Sprites/boulder.png";
         Map.cdiamond.src = "images/Sprites/CDiamond.png";
         Map.odiamond.src = "images/Sprites/ODiamond.png";
         Map.circle.src = "images/Sprites/Circle.png";

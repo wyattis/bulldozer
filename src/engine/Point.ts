@@ -1,4 +1,3 @@
-export default interface Point {
-  x: number
-  y: number
+export default class Point {
+  constructor (public x: number, public y: number) {}
 }
