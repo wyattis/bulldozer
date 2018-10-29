@@ -1,23 +1,12 @@
-import Engine from './engine/engine'
-import SceneManager from "./engine/scene-manager";
+import Engine from './engine/Engine'
+import SceneManager from "./engine/SceneManager";
+import Intro from './scenes/intro'
+import Game from './scenes/game'
 
 const dozer = new Engine('.container')
 const scenes = new SceneManager(dozer)
 
-scenes.add('intro', {
-  init () {
-    setTimeout(() => {
-      scenes.start('menu')
-    }, 2000)
-  },
-  render (ctx: CanvasRenderingContext2D) {
-    ctx.fillText('INTRO', 100, 100)
-  }
-})
-scenes.add('menu', {
-  render (ctx: CanvasRenderingContext2D) {
-    ctx.fillText('MENU', 100, 100)
-  }
-})
+scenes.add('intro', new Intro(scenes))
+scenes.add('game', new Game(scenes))
 
 scenes.start('intro')

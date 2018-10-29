@@ -1,28 +1,19 @@
-export enum CacheType {
-  IMAGE
-}
+import Cache, {CacheType} from './Cache'
 
-export class Cache {
-  private keys: Map<string, any> = new Map()
-  add (key: string, val: any, type: CacheType) {
-    this.keys.set(key, val)
-  }
-
-  get (key: string): any {
-    this.keys.get(key)
-  }
-}
-
-interface UpdateFunction {
+export interface UpdateFunction {
   (timestamp: number, delta: number): void
 }
 
-interface RenderFunction {
+export interface RenderFunction {
   (ctx: CanvasRenderingContext2D): void
 }
 
-interface ProgressFunction {
-  (completed: number, total: number): any
+export interface ProgressFunction {
+  (completed: number, total?: number, ctx?: CanvasRenderingContext2D): any
+}
+
+export interface LoadFunction {
+  (key: string, url: string, type: CacheType): any
 }
 
 interface QueueObj {
@@ -33,15 +24,15 @@ interface QueueObj {
 
 export default class Engine {
 
+  public cache: Cache = new Cache()
+  readonly ctx: CanvasRenderingContext2D
+
   private isRunning: boolean = false
   private animationFrameId: number|null = null
-  private cache: Cache = new Cache()
   private loadQueue: QueueObj[] = []
   private previousTimestamp: number = 0
   private updateCbs: UpdateFunction[] = []
   private renderCbs: RenderFunction[] = []
-
-  readonly ctx: CanvasRenderingContext2D
 
   constructor (parent?: string|HTMLElement) {
     this.ctx = this.mount(parent || document.body)
@@ -74,9 +65,9 @@ export default class Engine {
     const numToLoad = this.loadQueue.length
     let numLoaded = 0
     return new Promise((resolve, reject) => {
-      function checkDone () {
+      const checkDone = () => {
         if (progressCb) {
-          progressCb(numLoaded, numToLoad)
+          progressCb(numLoaded, numToLoad, this.ctx)
         }
         if (numLoaded >= numToLoad) {
           resolve()
@@ -85,20 +76,35 @@ export default class Engine {
       // If there's nothing to load.
       checkDone()
       for (let q of this.loadQueue) {
+        // TODO: Handle loading other types of data
         switch (q.type) {
           case CacheType.IMAGE:
-          let image = new Image()
-          image.src = q.url
-          image.onload = (ev: Event) => {
-            numLoaded++
-            this.cache.add(q.key, image, q.type)
-            checkDone()
-          }
-          image.onerror = (err) => {
-            numLoaded++
-            console.error(err)
-            checkDone()
-          }
+            let image = new Image()
+            image.src = q.url
+            image.onload = (ev: Event) => {
+              numLoaded++
+              this.cache.add(q.key, image, q.type)
+              checkDone()
+            }
+            image.onerror = (err) => {
+              numLoaded++
+              console.error(err)
+              checkDone()
+            }
+            break
+          case CacheType.JSON:
+            fetch(q.url)
+              .then(res => res.json())
+              .then(data => {
+                numLoaded++
+                this.cache.add(q.key, data, q.type)
+                checkDone()
+              })
+              .catch(err => {
+                numLoaded++
+                console.error(err)
+                checkDone()
+              })
         }
       }
     })
