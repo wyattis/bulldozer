@@ -12,9 +12,9 @@ export default class Intro extends Scene {
     i = 0
     intervalId = setInterval(() => {
       i++
-      if (i > 100) {
+      if (i > 10) {
         this.start('game', {
-          loadData: '1'
+          loadData: 1
         })
       }
     }, 60)

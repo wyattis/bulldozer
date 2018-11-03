@@ -1,6 +1,7 @@
 import Sprite from "./Sprite";
 import Point from "../engine/Point";
 import Cache from '../engine/Cache'
+import {DEGREES_TO_RADIANS} from "../engine/M";
 
 export enum Orientation {UP, DOWN, RIGHT, LEFT}
 
@@ -9,23 +10,20 @@ export default class Dozer extends Sprite {
     super(cache, pos, key)
   }
 
-  up (step: number) {
-    super.up(step)
-    this.orientation = Orientation.UP
+  rotateUp () {
+    this.angle = DEGREES_TO_RADIANS * 180
   }
 
-  down (step: number) {
-    super.down(step)
-    this.orientation = Orientation.DOWN
+  rotateDown () {
+    this.angle = 0
   }
 
-  right (step: number) {
-    super.right(step)
-    this.orientation = Orientation.RIGHT
+  rotateRight () {
+    this.angle = DEGREES_TO_RADIANS * -90
   }
 
-  left (step: number) {
-    super.left(step)
-    this.orientation = Orientation.LEFT
+  rotateLeft () {
+    this.angle = DEGREES_TO_RADIANS * 90
   }
+
 }

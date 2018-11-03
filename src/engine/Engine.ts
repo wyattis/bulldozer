@@ -1,8 +1,9 @@
 import Cache, {CacheType} from './Cache'
 import Point from "./Point";
+import Input from "./Input";
 
 export interface UpdateFunction {
-  (timestamp: number, delta: number): void
+  (delta: number, timestamp?: number): void
 }
 
 export interface RenderFunction {
@@ -30,9 +31,10 @@ interface QueueObj {
 export default class Engine {
 
   public cache: Cache = new Cache()
+  public size: Point
+  public input: Input
   readonly ctx: CanvasRenderingContext2D
 
-  public size: Point
   private isRunning: boolean = false
   private animationFrameId: number|null = null
   private loadQueue: QueueObj[] = []
@@ -44,6 +46,7 @@ export default class Engine {
     this.ctx = this.mount(parent || document.body)
     this.size = size || new Point(this.ctx.canvas.width, this.ctx.canvas.height)
     this.resize(this.size)
+    this.input = new Input()
     this.loop = this.loop.bind(this)
   }
 
@@ -150,19 +153,21 @@ export default class Engine {
 
   public reset () {
     this.stop()
+    this.input.reset()
     this.updateCbs = []
     this.renderCbs = []
   }
 
-  private _update (timestamp: number, delta: number): void {
+  private _update (delta: number, timestamp: number): void {
     let i = this.updateCbs.length
     while (i--) {
-      this.updateCbs[i](timestamp, delta)
+      this.updateCbs[i](delta, timestamp)
     }
   }
 
   private _render (): void {
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+    this.ctx.clearRect(0, 0, this.size.x, this.size.y)
     let i = this.renderCbs.length
     while (i--) {
       this.renderCbs[i](this.ctx)
@@ -172,8 +177,8 @@ export default class Engine {
   private loop (timestamp: number): void {
     const delta: number = timestamp - this.previousTimestamp
     this.previousTimestamp = timestamp
-    this._update(timestamp, delta)
-    this._render()
-    this.animationFrameId = requestAnimationFrame(this.loop)
+    if (this.isRunning) this._update(delta, timestamp)
+    if (this.isRunning) this._render()
+    if (this.isRunning) this.animationFrameId = requestAnimationFrame(this.loop)
   }
 }
